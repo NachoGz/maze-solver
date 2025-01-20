@@ -7,36 +7,48 @@ class Cell():
         self.has_right_wall = has_right_wall
         self.has_top_wall = has_top_wall
         self.has_bottom_wall = has_bottom_wall
-        self.__x1 = x1
-        self.__y1 = y1
-        self.__x2 = x2
-        self.__y2 = y2
-        self.__win = win
+        self._x1 = x1
+        self._y1 = y1
+        self._x2 = x2
+        self._y2 = y2
+        self._win = win
         self.visited = False
 
     def draw(self):
-        if self.__win:
-            top_left_corner = Point(self.__x1, self.__y1)
-            bottom_left_corner = Point(self.__x1, self.__y2)
-            top_right_corner = Point(self.__x2, self.__y1)
-            bottom_right_corner = Point(self.__x2, self.__y2)
-
+            if self._win is None:
+                return
+            x1 = self._x1 
+            x2 = self._x2 
+            y1 = self._y1 
+            y2 = self._y2 
             if self.has_left_wall:
-                wall = Line(top_left_corner, bottom_left_corner)
-                self.__win.draw_line(wall, "black")
-            if self.has_right_wall:
-                wall = Line(top_right_corner, bottom_right_corner)
-                self.__win.draw_line(wall, "black")
+                line = Line(Point(x1, y1), Point(x1, y2))
+                self._win.draw_line(line)
+            else:
+                line = Line(Point(x1, y1), Point(x1, y2))
+                self._win.draw_line(line, "white")
             if self.has_top_wall:
-                wall = Line(top_left_corner, top_right_corner)
-                self.__win.draw_line(wall, "black")
+                line = Line(Point(x1, y1), Point(x2, y1))
+                self._win.draw_line(line)
+            else:
+                line = Line(Point(x1, y1), Point(x2, y1))
+                self._win.draw_line(line, "white")
+            if self.has_right_wall:
+                line = Line(Point(x2, y1), Point(x2, y2))
+                self._win.draw_line(line)
+            else:
+                line = Line(Point(x2, y1), Point(x2, y2))
+                self._win.draw_line(line, "white")
             if self.has_bottom_wall:
-                wall = Line(bottom_left_corner, bottom_right_corner)
-                self.__win.draw_line(wall, "black")
+                line = Line(Point(x1, y2), Point(x2, y2))
+                self._win.draw_line(line)
+            else:
+                line = Line(Point(x1, y2), Point(x2, y2))
+                self._win.draw_line(line, "white")
 
     def get_center(self):
-        cx = (self.__x1 + self.__x2) / 2
-        cy = (self.__y1 + self.__y2) / 2
+        cx = (self._x1 + self._x2) / 2
+        cy = (self._y1 + self._y2) / 2
         return Point(cx, cy)
 
     def draw_move(self, to_cell, undo=False):
@@ -44,18 +56,6 @@ class Cell():
         to_center = to_cell.get_center()
         path = Line(from_center, to_center)
         if undo:
-            self.__win.draw_line(path, "gray")
+            self._win.draw_line(path, "gray")
         else:
-            self.__win.draw_line(path, "red")
-    
-    def get_top_left_x(self):
-        return self.__x1
-    
-    def get_bottom_right_x(self):
-        return self.__x2
-    
-    def get_top_left_y(self):
-        return self.__y1
-    
-    def get_bottom_right_y(self):
-        return self.__y2
+            self._win.draw_line(path, "red")
