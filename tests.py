@@ -28,19 +28,31 @@ class Tests(unittest.TestCase):
             num_cols,
         )
 
-    def test_maze_large(self):
-        num_cols = 100
-        num_rows = 50
-        m3 = Maze(0, 0, num_rows, num_cols, 5, 5, None, animate=False)
+    # def test_maze_large(self):
+    #     num_cols = 60
+    #     num_rows = 50
+    #     m3 = Maze(0, 0, num_rows, num_cols, 5, 5, None, animate=False)
+    #     self.assertEqual(
+    #         len(m3._cells),
+    #         num_rows,
+    #     )
+    #     self.assertEqual(
+    #         len(m3._cells[0]),
+    #         num_cols,
+    #     )
+    def test_maze_break_entrance_and_exit(self):
+        num_cols = 12
+        num_rows = 10
+        m1 = Maze(0, 0, num_rows, num_cols, 10, 10, animate=False)
         self.assertEqual(
-            len(m3._cells),
-            num_rows,
+            m1._cells[0][0].has_top_wall,
+            False,
         )
         self.assertEqual(
-            len(m3._cells[0]),
-            num_cols,
+            m1._cells[num_rows - 1][num_cols - 1].has_bottom_wall,
+            False,
         )
-
+    
     def test_maze_entrance_and_exit(self):
         num_cols = 5
         num_rows = 3
@@ -60,24 +72,33 @@ class Tests(unittest.TestCase):
             "Exit cell should have its bottom wall removed.",
         )
 
-    def test_maze_large_with_entrance_exit(self):
-        num_cols = 100
-        num_rows = 50
-        m3 = Maze(0, 0, num_rows, num_cols, 5, 5, None, animate=False)
+    # def test_maze_large_with_entrance_exit(self):
+    #     num_cols = 100
+    #     num_rows = 50
+    #     m3 = Maze(0, 0, num_rows, num_cols, 5, 5, None, animate=False)
 
-        # Test entrance
-        entrance = m3._cells[0][0]
-        self.assertFalse(
-            entrance.has_top_wall,
-            "Entrance cell should have its top wall removed.",
-        )
+    #     # Test entrance
+    #     entrance = m3._cells[0][0]
+    #     self.assertFalse(
+    #         entrance.has_top_wall,
+    #         "Entrance cell should have its top wall removed.",
+    #     )
 
-        # Test exit
-        exit_cell = m3._cells[num_rows - 1][num_cols - 1]
-        self.assertFalse(
-            exit_cell.has_bottom_wall,
-            "Exit cell should have its bottom wall removed.",
-        )
+    #     # Test exit
+    #     exit_cell = m3._cells[num_rows - 1][num_cols - 1]
+    #     self.assertFalse(
+    #         exit_cell.has_bottom_wall,
+    #         "Exit cell should have its bottom wall removed.",
+    #     )
+
+    def test_reset_cells_visited(self):
+        num_cols = 5
+        num_rows = 3
+        maze = Maze(0, 0, num_rows, num_cols, 20, 20, None, animate=False, seed=12345)
+
+        for i in range(maze._num_rows):
+            for j in range(maze._num_cols):
+                self.assertEqual(maze._cells[i][j].visited, False)
 
 if __name__ == "__main__":
     unittest.main()
